@@ -9,5 +9,5 @@ In this example I have two instances of the indicator added to the chart. One, c
 
 ![image](https://github.com/user-attachments/assets/8c336d1d-8813-491d-aa64-6e8e173af809)
 
-The original indicator and this simplified one work by finding candles on the higher timeframes that engulf their 21 and 14 EMAs. This technique works well for identifying important levels.
+The original indicator, and this simplified one, work by finding candles on the higher timeframes that engulf their 21 and 14 EMAs. This technique works well for identifying important levels.
 
