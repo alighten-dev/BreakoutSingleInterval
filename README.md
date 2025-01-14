@@ -1,6 +1,7 @@
 All credit goes to flexusFutures for his great indicator Breakouts Multi-Interval. 
 
 https://forum.ninjatrader.com/member/145226-flexusfuture
+
 https://ninjatraderecosystem.com/user-app-share-download/breakouts-multi-interval/
 
 I needed a simplified version that adds the higher timeframe DataSeries in a way that can be easily used in NinjaTrader Strategies. 
