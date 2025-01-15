@@ -79,7 +79,8 @@ namespace NinjaTrader.NinjaScript.Indicators
             }
             else if (State == State.Configure)
             {				
-               	AddDataSeries(this.Instrument.FullName, TF1Type, timeframe1_value);	
+               	BarsPeriod barPeriod = new BarsPeriod { BarsPeriodType = TF1Type, Value = timeframe1_value };
+               	AddDataSeries(this.Instrument.FullName, barPeriod, 1000, "", true);		
             }
 			else if (State == State.DataLoaded)
 			{
