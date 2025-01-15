@@ -47,7 +47,7 @@ namespace NinjaTrader.NinjaScript.Indicators
         [XmlIgnore]
 		private Brush brush1;
         private int index;
-		private Breakout breakout1;
+		public Breakout SingleBreakout;
 
         protected override void OnStateChange()
         {
@@ -84,12 +84,12 @@ namespace NinjaTrader.NinjaScript.Indicators
 			else if (State == State.DataLoaded)
 			{
 				brush1 = color1;
-				breakout1 = new Breakout(1,true,0,0,0, brush1);
+				SingleBreakout = new Breakout(1,true,0,0,0, brush1);
 				
-				breakout1.type = TF1Type;
-                breakout1.index = 1;
-                breakout1.time = timeframe1_value;
-                breakout1.enabled = true;
+				SingleBreakout.type = TF1Type;
+                SingleBreakout.index = 1;
+                SingleBreakout.time = timeframe1_value;
+                SingleBreakout.enabled = true;
 			}
             else if (State == State.Historical)
             {
@@ -128,17 +128,17 @@ namespace NinjaTrader.NinjaScript.Indicators
         private void UpdateBreakouts()
         {
            
-            if (breakout1.barIndex != 0)
+            if (SingleBreakout.barIndex != 0)
             {
-                if (!breakout1.b_high && High[0] > breakout1.high)
+                if (!SingleBreakout.b_high && High[0] > SingleBreakout.high)
                 {
 
-                    breakout1.b_high = true;
+                    SingleBreakout.b_high = true;
                 }
-                else if (!breakout1.b_low && Low[0] < breakout1.low)
+                else if (!SingleBreakout.b_low && Low[0] < SingleBreakout.low)
                 {
 
-                    breakout1.b_low = true;
+                    SingleBreakout.b_low = true;
                 }
             }
 
@@ -149,15 +149,15 @@ namespace NinjaTrader.NinjaScript.Indicators
         private void RemoveDrawings()
         {
            
-            if (breakout1.b_high && breakout1.b_low)
+            if (SingleBreakout.b_high && SingleBreakout.b_low)
             {
-                RemoveDrawObject("high_" + breakout1.time + " " + breakout1.type);
-                RemoveDrawObject("low_" + breakout1.time + " " + breakout1.type);
-                breakout1.b_high = false;
-                breakout1.b_low = false;
-                breakout1.high = 0;
-                breakout1.low = 0;
-                breakout1.barIndex = 0;
+                RemoveDrawObject("high_" + SingleBreakout.time + " " + SingleBreakout.type);
+                RemoveDrawObject("low_" + SingleBreakout.time + " " + SingleBreakout.type);
+                SingleBreakout.b_high = false;
+                SingleBreakout.b_low = false;
+                SingleBreakout.high = 0;
+                SingleBreakout.low = 0;
+                SingleBreakout.barIndex = 0;
             }
             
         }
@@ -183,15 +183,15 @@ namespace NinjaTrader.NinjaScript.Indicators
                 }
 
 
-                breakout1.high = focusedBar_h;
-                breakout1.low = focusedBar_l;
-                breakout1.barIndex = CurrentBars[index];
+                SingleBreakout.high = focusedBar_h;
+                SingleBreakout.low = focusedBar_l;
+                SingleBreakout.barIndex = CurrentBars[index];
 
-                breakout1.b_high = false;
-                breakout1.b_low = false;
-                breakout1._type = "Engulf";
-                Draw.Line(this, "high_" + breakout1.time + " " + breakout1.type, false, 1, focusedBar_h, len * -1, focusedBar_h, brush1, DashStyleHelper.Solid, width);
-                Draw.Line(this, "low_" + breakout1.time + " " + breakout1.type, false, 1, focusedBar_l, len * -1, focusedBar_l, brush1, DashStyleHelper.Solid, width);
+                SingleBreakout.b_high = false;
+                SingleBreakout.b_low = false;
+                SingleBreakout._type = "Engulf";
+                Draw.Line(this, "high_" + SingleBreakout.time + " " + SingleBreakout.type, false, 1, focusedBar_h, len * -1, focusedBar_h, brush1, DashStyleHelper.Solid, width);
+                Draw.Line(this, "low_" + SingleBreakout.time + " " + SingleBreakout.type, false, 1, focusedBar_l, len * -1, focusedBar_l, brush1, DashStyleHelper.Solid, width);
             }
         }
         private void FindMother()
@@ -217,14 +217,14 @@ namespace NinjaTrader.NinjaScript.Indicators
                     }
                 }
 
-                breakout1.high = focusedBar_h;
-                breakout1.low = focusedBar_l;
-                breakout1.barIndex = CurrentBars[index];
-                breakout1.b_high = false;
-                breakout1.b_low = false;
-                breakout1._type = "Mother";
-                Draw.Line(this, "high_" + breakout1.time + " " + breakout1.type, false, 1, focusedBar_h, len * -1, focusedBar_h, brush1, DashStyleHelper.Solid, width);
-                Draw.Line(this, "low_" + breakout1.time + " " + breakout1.type , false, 1, focusedBar_l, len * -1, focusedBar_l, brush1, DashStyleHelper.Solid, width);
+                SingleBreakout.high = focusedBar_h;
+                SingleBreakout.low = focusedBar_l;
+                SingleBreakout.barIndex = CurrentBars[index];
+                SingleBreakout.b_high = false;
+                SingleBreakout.b_low = false;
+                SingleBreakout._type = "Mother";
+                Draw.Line(this, "high_" + SingleBreakout.time + " " + SingleBreakout.type, false, 1, focusedBar_h, len * -1, focusedBar_h, brush1, DashStyleHelper.Solid, width);
+                Draw.Line(this, "low_" + SingleBreakout.time + " " + SingleBreakout.type , false, 1, focusedBar_l, len * -1, focusedBar_l, brush1, DashStyleHelper.Solid, width);
             }
         }
 
@@ -244,7 +244,7 @@ namespace NinjaTrader.NinjaScript.Indicators
         public int timeframe1_value
         { get; set; }
      
-        [XmlIgnore]
+        [NinjaScriptProperty]
         [Display(Name = "Color 1", Order = 4, GroupName = "1) General")]
         public Brush color1
         { get; set; }
@@ -269,18 +269,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private BreakoutSingleInterval[] cacheBreakoutSingleInterval;
-		public BreakoutSingleInterval BreakoutSingleInterval(bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, int len, int width)
+		public BreakoutSingleInterval BreakoutSingleInterval(bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, Brush color1, int len, int width)
 		{
-			return BreakoutSingleInterval(Input, enable_timeframe1, tF1Type, timeframe1_value, len, width);
+			return BreakoutSingleInterval(Input, enable_timeframe1, tF1Type, timeframe1_value, color1, len, width);
 		}
 
-		public BreakoutSingleInterval BreakoutSingleInterval(ISeries<double> input, bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, int len, int width)
+		public BreakoutSingleInterval BreakoutSingleInterval(ISeries<double> input, bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, Brush color1, int len, int width)
 		{
 			if (cacheBreakoutSingleInterval != null)
 				for (int idx = 0; idx < cacheBreakoutSingleInterval.Length; idx++)
-					if (cacheBreakoutSingleInterval[idx] != null && cacheBreakoutSingleInterval[idx].enable_timeframe1 == enable_timeframe1 && cacheBreakoutSingleInterval[idx].TF1Type == tF1Type && cacheBreakoutSingleInterval[idx].timeframe1_value == timeframe1_value && cacheBreakoutSingleInterval[idx].len == len && cacheBreakoutSingleInterval[idx].width == width && cacheBreakoutSingleInterval[idx].EqualsInput(input))
+					if (cacheBreakoutSingleInterval[idx] != null && cacheBreakoutSingleInterval[idx].enable_timeframe1 == enable_timeframe1 && cacheBreakoutSingleInterval[idx].TF1Type == tF1Type && cacheBreakoutSingleInterval[idx].timeframe1_value == timeframe1_value && cacheBreakoutSingleInterval[idx].color1 == color1 && cacheBreakoutSingleInterval[idx].len == len && cacheBreakoutSingleInterval[idx].width == width && cacheBreakoutSingleInterval[idx].EqualsInput(input))
 						return cacheBreakoutSingleInterval[idx];
-			return CacheIndicator<BreakoutSingleInterval>(new BreakoutSingleInterval(){ enable_timeframe1 = enable_timeframe1, TF1Type = tF1Type, timeframe1_value = timeframe1_value, len = len, width = width }, input, ref cacheBreakoutSingleInterval);
+			return CacheIndicator<BreakoutSingleInterval>(new BreakoutSingleInterval(){ enable_timeframe1 = enable_timeframe1, TF1Type = tF1Type, timeframe1_value = timeframe1_value, color1 = color1, len = len, width = width }, input, ref cacheBreakoutSingleInterval);
 		}
 	}
 }
@@ -289,14 +289,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, int len, int width)
+		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, Brush color1, int len, int width)
 		{
-			return indicator.BreakoutSingleInterval(Input, enable_timeframe1, tF1Type, timeframe1_value, len, width);
+			return indicator.BreakoutSingleInterval(Input, enable_timeframe1, tF1Type, timeframe1_value, color1, len, width);
 		}
 
-		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(ISeries<double> input , bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, int len, int width)
+		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(ISeries<double> input , bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, Brush color1, int len, int width)
 		{
-			return indicator.BreakoutSingleInterval(input, enable_timeframe1, tF1Type, timeframe1_value, len, width);
+			return indicator.BreakoutSingleInterval(input, enable_timeframe1, tF1Type, timeframe1_value, color1, len, width);
 		}
 	}
 }
@@ -305,14 +305,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, int len, int width)
+		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, Brush color1, int len, int width)
 		{
-			return indicator.BreakoutSingleInterval(Input, enable_timeframe1, tF1Type, timeframe1_value, len, width);
+			return indicator.BreakoutSingleInterval(Input, enable_timeframe1, tF1Type, timeframe1_value, color1, len, width);
 		}
 
-		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(ISeries<double> input , bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, int len, int width)
+		public Indicators.BreakoutSingleInterval BreakoutSingleInterval(ISeries<double> input , bool enable_timeframe1, Data.BarsPeriodType tF1Type, int timeframe1_value, Brush color1, int len, int width)
 		{
-			return indicator.BreakoutSingleInterval(input, enable_timeframe1, tF1Type, timeframe1_value, len, width);
+			return indicator.BreakoutSingleInterval(input, enable_timeframe1, tF1Type, timeframe1_value, color1, len, width);
 		}
 	}
 }
